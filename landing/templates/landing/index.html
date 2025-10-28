@@ -6,23 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TrackrHub – Track your subscriptions easily</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
+  <style>
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
 
   <!-- Hero Section -->
-  <section class="flex flex-col items-center justify-center min-h-screen text-center px-6">
-    <h1 class="text-2xl md:text-5xl font-bold mb-4">
+  <section class="flex flex-col items-center justify-center flex-grow text-center px-6">
+    <h1 id="hero-title" class="text-2xl md:text-5xl font-bold mb-4">
       Take control of your subscriptions and reports
     </h1>
-    <p class="text-lg md:text-xl text-gray-600 max-w-xl mb-8">
-      SubTrackr helps freelancers and small business owners track recurring expenses and generate monthly financial reports automatically.
+    <p id="hero-desc" class="text-lg md:text-xl text-gray-600 max-w-xl mb-8">
+      TrackrHub helps freelancers and small business owners track recurring expenses and generate monthly reports automatically.
     </p>
 
     <form method="POST" class="w-full max-w-md bg-white shadow-lg p-4 rounded-2xl flex gap-2">
       {% csrf_token %}
       {{ form.email }}
-      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 rounded-xl cursor-pointer">
+      <button id="join-btn" type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 rounded-xl cursor-pointer">
         Join Waitlist
       </button>
     </form>
@@ -34,25 +37,106 @@
         {% endfor %}
       </div>
     {% endif %}
+
+    <!-- Contador -->
+    <div class="mt-6 text-sm text-gray-500 fade-in">
+      🚀 <span id="count-text">{{ subscriber_count }}</span> people already joined the waitlist!
+    </div>
   </section>
 
-  <!-- Features Section -->
+  <!-- Features -->
   <section class="py-16 bg-white">
     <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
       <div>
-        <h3 class="text-xl font-semibold mb-2">Automatic Tracking</h3>
-        <p class="text-gray-600">Add subscriptions manually to keep everything in one place.</p>
+        <h3 id="feature1-title" class="text-xl font-semibold mb-2">Automatic Tracking</h3>
+        <p id="feature1-desc" class="text-gray-600">Add subscriptions manually to keep everything in one place.</p>
       </div>
       <div>
-        <h3 class="text-xl font-semibold mb-2">Smart Reports</h3>
-        <p class="text-gray-600">Receive clear visual summaries and insights every month.</p>
+        <h3 id="feature2-title" class="text-xl font-semibold mb-2">Smart Reports</h3>
+        <p id="feature2-desc" class="text-gray-600">Receive clear visual summaries and insights every month.</p>
       </div>
       <div>
-        <h3 class="text-xl font-semibold mb-2">Renewal Alerts</h3>
-        <p class="text-gray-600">Get notified before any subscription renews or charges your card.</p>
+        <h3 id="feature3-title" class="text-xl font-semibold mb-2">Renewal Alerts</h3>
+        <p id="feature3-desc" class="text-gray-600">Get notified before any subscription renews or charges your card.</p>
       </div>
     </div>
   </section>
 
+  <footer class="py-4 text-center text-gray-500 text-sm border-t bg-gray-100 relative">
+    <p id="idea-text">
+      💡 Have an idea or suggestion? Send it to
+      <a href="mailto:gabriellsbagetti@gmail.com" class="text-blue-600 hover:underline">
+        gabriellsbagetti@gmail.com
+      </a>
+    </p>
+
+    <div class="absolute right-4 bottom-4">
+      <select id="language" class="text-sm border-gray-300 rounded-md p-1 bg-white cursor-pointer">
+        <option value="en" selected>EN</option>
+        <option value="pt">PT</option>
+      </select>
+    </div>
+  </footer>
+
+  <script>
+    const langSelector = document.getElementById('language');
+
+    const texts = {
+      en: {
+        heroTitle: "Take control of your subscriptions and reports",
+        heroDesc: "TrackrHub helps freelancers and small business owners track recurring expenses and generate monthly reports automatically.",
+        joinBtn: "Join Waitlist",
+        countText: "{{ subscriber_count }} people already joined the waitlist!",
+        feature1Title: "Automatic Tracking",
+        feature1Desc: "Add subscriptions manually to keep everything in one place.",
+        feature2Title: "Smart Reports",
+        feature2Desc: "Receive clear visual summaries and insights every month.",
+        feature3Title: "Renewal Alerts",
+        feature3Desc: "Get notified before any subscription renews or charges your card.",
+        ideaText: "💡 Have an idea or suggestion? Send it to <a href='mailto:gabriellsbagetti@gmail.com' class='text-blue-600 hover:underline'>gabriellsbagetti@gmail.com</a>"
+      },
+      pt: {
+        heroTitle: "Assuma o controle das suas assinaturas e relatórios",
+        heroDesc: "O TrackrHub ajuda freelancers e pequenos empreendedores a controlar despesas recorrentes e gerar relatórios mensais automaticamente.",
+        joinBtn: "Entrar na Lista de Espera",
+        countText: "{{ subscriber_count }} pessoas já se inscreveram na lista de espera!",
+        feature1Title: "Gerenciamento Automático",
+        feature1Desc: "Adicione assinaturas manualmente e mantenha tudo organizado em um só lugar.",
+        feature2Title: "Relatórios Inteligentes",
+        feature2Desc: "Receba resumos visuais claros e insights todo mês.",
+        feature3Title: "Alertas de Renovação",
+        feature3Desc: "Seja avisado antes de qualquer assinatura renovar ou cobrar seu cartão.",
+        ideaText: "💡 Tem uma ideia ou sugestão? Envie para <a href='mailto:gabriellsbagetti@gmail.com' class='text-blue-600 hover:underline'>gabriellsbagetti@gmail.com</a>"
+      }
+    };
+
+    function setLanguage(lang) {
+      const t = texts[lang];
+      document.getElementById('hero-title').innerText = t.heroTitle;
+      document.getElementById('hero-desc').innerText = t.heroDesc;
+      document.getElementById('join-btn').innerText = t.joinBtn;
+      document.getElementById('count-text').innerText = t.countText;
+      document.getElementById('feature1-title').innerText = t.feature1Title;
+      document.getElementById('feature1-desc').innerText = t.feature1Desc;
+      document.getElementById('feature2-title').innerText = t.feature2Title;
+      document.getElementById('feature2-desc').innerText = t.feature2Desc;
+      document.getElementById('feature3-title').innerText = t.feature3Title;
+      document.getElementById('feature3-desc').innerText = t.feature3Desc;
+      document.getElementById('idea-text').innerHTML = t.ideaText;
+    }
+
+    langSelector.addEventListener('change', e => {
+      const lang = e.target.value;
+      setLanguage(lang);
+      localStorage.setItem('lang', lang);
+    });
+
+    // Persistência da escolha de idioma
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('lang') || 'en';
+      langSelector.value = savedLang;
+      setLanguage(savedLang);
+    });
+  </script>
 </body>
 </html>
