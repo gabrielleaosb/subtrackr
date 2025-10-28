@@ -18,7 +18,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           environment: production
           auto_merge: false
-          required_contexts: []
+          required_contexts: ""
 
       - name: Deploy to Render
         run: |
