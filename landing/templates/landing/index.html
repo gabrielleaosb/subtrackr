@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrackrHub – Track your subscriptions easily</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+<body class="bg-gray-50 text-gray-900">
+
+  <!-- Hero Section -->
+  <section class="flex flex-col items-center justify-center min-h-screen text-center px-6">
+    <h1 class="text-2xl md:text-5xl font-bold mb-4">
+      Take control of your subscriptions and reports
+    </h1>
+    <p class="text-lg md:text-xl text-gray-600 max-w-xl mb-8">
+      SubTrackr helps freelancers and small business owners track recurring expenses and generate monthly financial reports automatically.
+    </p>
+
+    <form method="POST" class="w-full max-w-md bg-white shadow-lg p-4 rounded-2xl flex gap-2">
+      {% csrf_token %}
+      {{ form.email }}
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 rounded-xl cursor-pointer">
+        Join Waitlist
+      </button>
+    </form>
+
+    {% if messages %}
+      <div class="mt-4 text-green-600">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-5xl mx-auto px-6 grid md:grid-cols-3 gap-8 text-center">
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Automatic Tracking</h3>
+        <p class="text-gray-600">Add subscriptions manually to keep everything in one place.</p>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Smart Reports</h3>
+        <p class="text-gray-600">Receive clear visual summaries and insights every month.</p>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold mb-2">Renewal Alerts</h3>
+        <p class="text-gray-600">Get notified before any subscription renews or charges your card.</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
